@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import Player from "../components/Player";
+import Player, { PlayerBookmark } from "../components/Player";
 import { useState } from "react";
 
 function Layout() {
@@ -16,6 +16,7 @@ function Layout() {
       <Header onToggleSidebar={toggleSidebar} />
       <Sidebar isActive={isSidebarActive} />
       <Player />
+      <PlayerBookmark />
       <main className="main">
         <div className="container-fluid">
           <Outlet />

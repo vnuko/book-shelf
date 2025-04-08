@@ -26,6 +26,7 @@ interface PlayerContextType {
   ) => void;
   nextTrack?: () => void;
   prevTrack?: () => void;
+  togglePlayer?: () => void;
   hasNext: boolean;
   hasPrev: boolean;
 }
@@ -57,11 +58,11 @@ export function PlayerProvider({ children }) {
     trackIndex: number
   ) {
     const newState: PlayerContextType = {
+      ...playerState,
       coverSrc,
       title,
       artist,
       audioSrc,
-      isActive: true,
       tracks,
       currentTrackIndex: trackIndex,
     };
@@ -71,59 +72,47 @@ export function PlayerProvider({ children }) {
   }
 
   function nextTrack() {
-    if (!playerState.tracks) return;
+    const { tracks, currentTrackIndex } = playerState;
+    if (!tracks || currentTrackIndex >= tracks.length - 1) return;
 
-    if (playerState.currentTrackIndex < playerState.tracks.length - 1) {
-      const newIndex = playerState.currentTrackIndex + 1;
-      const nextTrack = playerState.tracks[newIndex];
+    const newIndex = currentTrackIndex + 1;
+    const { name, fileUrl } = tracks[newIndex];
 
-      setPlayerState((prev) => ({
-        ...prev,
-        title: nextTrack.name,
-        audioSrc: nextTrack.fileUrl,
-        currentTrackIndex: newIndex,
-        isActive: true,
-      }));
+    const updatedState = {
+      ...playerState,
+      title: name,
+      audioSrc: fileUrl,
+      currentTrackIndex: newIndex,
+      isActive: true,
+    };
 
-      localStorage.setItem(
-        "bookShelfPlayerState",
-        JSON.stringify({
-          ...playerState,
-          title: nextTrack.name,
-          audioSrc: nextTrack.fileUrl,
-          currentTrackIndex: newIndex,
-          isActive: true,
-        })
-      );
-    }
+    setPlayerState(updatedState);
+    localStorage.setItem("bookShelfPlayerState", JSON.stringify(updatedState));
+  }
+  function prevTrack() {
+    const { tracks, currentTrackIndex } = playerState;
+    if (!tracks || currentTrackIndex <= 0) return;
+
+    const newIndex = currentTrackIndex - 1;
+    const { name, fileUrl } = tracks[newIndex];
+
+    const updatedState = {
+      ...playerState,
+      title: name,
+      audioSrc: fileUrl,
+      currentTrackIndex: newIndex,
+    };
+
+    setPlayerState(updatedState);
+    localStorage.setItem("bookShelfPlayerState", JSON.stringify(updatedState));
   }
 
-  function prevTrack() {
-    if (!playerState.tracks) return;
-
-    if (playerState.currentTrackIndex > 0) {
-      const newIndex = playerState.currentTrackIndex - 1;
-      const prevTrack = playerState.tracks[newIndex];
-
-      setPlayerState((prev) => ({
-        ...prev,
-        title: prevTrack.name,
-        audioSrc: prevTrack.fileUrl,
-        currentTrackIndex: newIndex,
-        isActive: true,
-      }));
-
-      localStorage.setItem(
-        "bookShelfPlayerState",
-        JSON.stringify({
-          ...playerState,
-          title: prevTrack.name,
-          audioSrc: prevTrack.fileUrl,
-          currentTrackIndex: newIndex,
-          isActive: true,
-        })
-      );
-    }
+  function togglePlayer() {
+    setPlayerState((prev) => {
+      const updated = { ...prev, isActive: !prev.isActive };
+      localStorage.setItem("bookShelfPlayerState", JSON.stringify(updated));
+      return updated;
+    });
   }
 
   return (
@@ -133,6 +122,7 @@ export function PlayerProvider({ children }) {
         playAudio,
         nextTrack,
         prevTrack,
+        togglePlayer,
         hasNext:
           (playerState.tracks || []).length > 0 &&
           playerState.currentTrackIndex < (playerState.tracks || []).length - 1,

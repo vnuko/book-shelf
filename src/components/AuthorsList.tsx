@@ -29,14 +29,17 @@ function Author({ author }) {
   return (
     <div className="col-6 col-sm-4 col-lg-2">
       <div className="thumbnail">
-        <div className="thumbnail-cover">
-          <img src={authorImgPath} alt={author.name} />
-          <Link to={`/author/${author.id}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -2 24 24">
-              <path d="M3.534 10.07a1 1 0 1 1 .733 1.86A3.579 3.579 0 0 0 2 15.26V17a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1.647a3.658 3.658 0 0 0-2.356-3.419 1 1 0 1 1 .712-1.868A5.658 5.658 0 0 1 14 15.353V17a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3v-1.74a5.579 5.579 0 0 1 3.534-5.19zM7 0a4 4 0 0 1 4 4v2a4 4 0 1 1-8 0V4a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v2a2 2 0 1 0 4 0V4a2 2 0 0 0-2-2z"></path>
-            </svg>
-          </Link>
-        </div>
+        <Link to={`/author/${author.id}`}>
+          <div className="thumbnail-cover">
+            <img src={authorImgPath} alt={author.name} />
+            <span className="thumbnail-stat">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M64 0C28.7 0 0 28.7 0 64L0 448s0 0 0 0c0 35.3 28.7 64 64 64l368 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-16 0 0-66.7c18.6-6.6 32-24.4 32-45.3l0-320c0-26.5-21.5-48-48-48L64 0zM384 416l0 64L64 480c-17.7 0-32-14.3-32-32s14.3-32 32-32l320 0zM64 384c-11.7 0-22.6 3.1-32 8.6L32 64c0-17.7 14.3-32 32-32l32 0 0 352-32 0zm64 0l0-352 272 0c8.8 0 16 7.2 16 16l0 320c0 8.8-7.2 16-16 16l-272 0zm48-240c0 8.8 7.2 16 16 16l160 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-160 0c-8.8 0-16 7.2-16 16zm0 96c0 8.8 7.2 16 16 16l160 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-160 0c-8.8 0-16 7.2-16 16z" />
+              </svg>
+              {author.bookCount}
+            </span>
+          </div>
+        </Link>
         <div className="thumbnail-title">
           <h3>
             <Link to={`/author/${author.id}`}>{author.name}</Link>

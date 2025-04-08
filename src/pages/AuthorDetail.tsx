@@ -71,7 +71,7 @@ export default function AuthorDetail() {
           </div>
         </div>
       </div>
-      <BooksOverview />
+      <BooksOverview authorId={authorId} />
     </>
   );
 }
